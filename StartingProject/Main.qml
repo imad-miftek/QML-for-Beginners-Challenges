@@ -33,6 +33,79 @@ Window {
         property url webSite
     }
 
+    // Reusable component for formatted detail text
+    component DetailText: Text {
+        property string label: ""
+        property string value: ""
+        
+        text: "<span style='color: black;'><b>" + label + ":</b></span> <span style='color: #34495e;'>" + value + "</span>"
+        font.pixelSize: 15
+        wrapMode: Text.WordWrap
+        textFormat: Text.RichText
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
+    }
+
+    // Reusable component for clickable website text
+    component WebsiteText: Text {
+        property url websiteUrl
+        
+        text: "<span style='color: black;'><b>Website:</b></span> <a href='" + websiteUrl.toString() + "'>" + websiteUrl.toString() + "</a>"
+        font.pixelSize: 15
+        wrapMode: Text.WordWrap
+        textFormat: Text.RichText
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
+        
+        onLinkActivated: function(link) {
+            Qt.openUrlExternally(link)
+        }
+    }
+
+    // Reusable component for the photo frame
+    component PhotoFrame: Rectangle {
+        property alias imageSource: photoImage.source
+        
+        width: 150
+        height: 150
+        color: "#ffffff"
+        radius: 5
+        border.width: 2
+        
+        Image {
+            id: photoImage
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+            anchors.topMargin: 5
+            anchors.bottomMargin: 5
+            antialiasing: true
+            fillMode: Image.PreserveAspectFit
+        }
+    }
+
+    // Reusable component for toggle button
+    component ToggleButton: Button {
+        property alias buttonText: toggleBtn.text
+        signal buttonClicked()
+        
+        id: toggleBtn
+        width: 120
+        height: 30
+        checkable: false
+        font.bold: true
+        display: AbstractButton.TextOnly
+        
+        onClicked: buttonClicked()
+    }
+
     ContactInfo {
         id: myContactInfo
 
@@ -152,90 +225,55 @@ Window {
                         anchors.bottomMargin: 0
                         visible: card.showDetails
 
-                        Text {
-                            id: country
-                            x: 0
-                            y: 176
-                            color: "#000000"
-                            text: "<span style='color: black;'><b>Country:</b></span> <span style='color: #34495e;'>" + myContactInfo.country + "</span>"
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.top: address.bottom
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            anchors.topMargin: 5
-                            font.pixelSize: 15
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
-
-                        Text {
-                            id: phone
-                            x: 0
-                            y: 201
-                            text: "<span style='color: black;'><b>Phone:</b></span> <span style='color: #34495e;'>" + myContactInfo.phone + "</span>"
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.top: country.bottom
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            anchors.topMargin: 5
-                            font.pixelSize: 15
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
-
-                        Text {
-                            id: email
-                            x: 0
-                            y: 226
-                            text: "<span style='color: black;'><b>Email:</b></span> <span style='color: #34495e;'>" + myContactInfo.email + "</span>"
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.top: phone.bottom
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            anchors.topMargin: 5
-                            font.pixelSize: 15
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-                        }
-
-                        Text {
-                            id: website
-                            x: 0
-                            y: 251
-                            text: "<span style='color: black;'><b>Website:</b></span> <a href='" + myContactInfo.webSite.toString() + "'>" + myContactInfo.webSite.toString() + "</a>"
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.top: email.bottom
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
-                            anchors.topMargin: 5
-                            font.pixelSize: 15
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
-
-                            onLinkActivated: function(link) {
-                                Qt.openUrlExternally(link)
-                            }
-                        }
-
-                        Text {
+                        DetailText {
                             id: address
                             x: 0
                             y: 151
                             height: 20
-                            text: "<span style='color: black;'><b>Address:</b></span> <span style='color: #34495e;'>" + myContactInfo.address + "</span>"
-                            anchors.left: parent.left
-                            anchors.right: parent.right
+                            label: "Address"
+                            value: myContactInfo.address
                             anchors.top: parent.top
-                            anchors.leftMargin: 0
-                            anchors.rightMargin: 0
                             anchors.topMargin: 0
-                            font.pixelSize: 15
-                            wrapMode: Text.WordWrap
-                            textFormat: Text.RichText
+                        }
+
+                        DetailText {
+                            id: country
+                            x: 0
+                            y: 176
+                            color: "#000000"
+                            label: "Country"
+                            value: myContactInfo.country
+                            anchors.top: address.bottom
+                            anchors.topMargin: 5
+                        }
+
+                        DetailText {
+                            id: phone
+                            x: 0
+                            y: 201
+                            label: "Phone"
+                            value: myContactInfo.phone
+                            anchors.top: country.bottom
+                            anchors.topMargin: 5
+                        }
+
+                        DetailText {
+                            id: email
+                            x: 0
+                            y: 226
+                            label: "Email"
+                            value: myContactInfo.email
+                            anchors.top: phone.bottom
+                            anchors.topMargin: 5
+                        }
+
+                        WebsiteText {
+                            id: website
+                            x: 0
+                            y: 251
+                            websiteUrl: myContactInfo.webSite
+                            anchors.top: email.bottom
+                            anchors.topMargin: 5
                         }
                     }
                 }
@@ -245,21 +283,16 @@ Window {
                     height: 0.1 * detailsColumn.height
                     width: parent.width  // Remove anchors, use width instead
 
-                    Button {
+                    ToggleButton {
                         id: toggleButton
                         y: -2
-                        width: 120
-                        height: 30
-                        text: qsTr("Details")
+                        buttonText: qsTr("Details")
                         anchors.left: parent.left
                         anchors.bottom: parent.bottom
                         anchors.leftMargin: 0
                         anchors.bottomMargin: 0
-                        checkable: false
-                        font.bold: true
-                        display: AbstractButton.TextOnly
 
-                        onClicked: {
+                        onButtonClicked: {
                             card.showDetails = !card.showDetails;
                         }
                     }
@@ -278,32 +311,12 @@ Window {
                 anchors.topMargin: 0
                 anchors.bottomMargin: 0
 
-                Rectangle {
+                PhotoFrame {
                     id: rectangle
-                    width: 150
-                    height: 150
-                    color: "#ffffff"
-                    radius: 5
-                    border.width: 2
+                    imageSource: myContactInfo.photo
                     anchors.right: parent.right
                     anchors.rightMargin: 0
                     // Remove anchors.right, anchors.top - Column will position this
-
-                    Image {
-                        id: image
-                        y: 0
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.leftMargin: 5
-                        anchors.rightMargin: 5
-                        anchors.topMargin: 5
-                        anchors.bottomMargin: 5
-                        source: myContactInfo.photo
-                        antialiasing: true
-                        fillMode: Image.PreserveAspectFit
-                    }
                 }
             }
         }
