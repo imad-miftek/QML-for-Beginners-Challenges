@@ -93,13 +93,12 @@ Window {
                 anchors.leftMargin: 0
                 anchors.topMargin: 0
                 anchors.bottomMargin: 0
+                spacing: 0  // Add spacing control
 
                 Item {
                     id: infoItem
                     height: 0.9 * detailsColumn.height
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
+                    width: parent.width  // Remove anchor, use width instead
 
                     Text {
                         id: name
@@ -240,12 +239,7 @@ Window {
                 Item {
                     id: buttonItem
                     height: 0.1 * detailsColumn.height
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.leftMargin: 0
-                    anchors.rightMargin: 0
-                    anchors.bottomMargin: 0
+                    width: parent.width  // Remove anchors, use width instead
 
                     Button {
                         id: toggleButton
@@ -264,7 +258,6 @@ Window {
                         onClicked: {
                             card.showDetails = !card.showDetails;
                         }
-
                     }
                 }
             }
@@ -289,9 +282,8 @@ Window {
                     radius: 5
                     border.width: 2
                     anchors.right: parent.right
-                    anchors.top: parent.top
                     anchors.rightMargin: 0
-                    anchors.topMargin: 0
+                    // Remove anchors.right, anchors.top - Column will position this
 
                     Image {
                         id: image
