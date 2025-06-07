@@ -205,7 +205,7 @@ Window {
                             id: website
                             x: 0
                             y: 251
-                            text: "<span style='color: black;'><b>Website:</b></span> <span style='color: #3498db;'>" + myContactInfo.webSite.toString() + "</span>"
+                            text: "<span style='color: black;'><b>Website:</b></span> <a href='" + myContactInfo.webSite.toString() + "'>" + myContactInfo.webSite.toString() + "</a>"
                             anchors.left: parent.left
                             anchors.right: parent.right
                             anchors.top: email.bottom
@@ -215,6 +215,10 @@ Window {
                             font.pixelSize: 15
                             wrapMode: Text.WordWrap
                             textFormat: Text.RichText
+
+                            onLinkActivated: function(link) {
+                                Qt.openUrlExternally(link)
+                            }
                         }
 
                         Text {
