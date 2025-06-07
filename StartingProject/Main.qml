@@ -69,7 +69,7 @@ Window {
         border.color: "#000000"
         border.width: 1
 
-        property bool showDetails: false
+        property bool showDetails: true
 
         Item {
             id: cardItem
@@ -151,6 +151,7 @@ Window {
                         anchors.rightMargin: 0
                         anchors.topMargin: 15
                         anchors.bottomMargin: 0
+                        visible: card.showDetails
 
                         Text {
                             id: country
@@ -259,6 +260,11 @@ Window {
                         checkable: false
                         font.bold: true
                         display: AbstractButton.TextOnly
+
+                        onClicked: {
+                            card.showDetails = !card.showDetails;
+                        }
+
                     }
                 }
             }
